@@ -8,7 +8,14 @@ public class Generics {
         listA.add(new C());
     }
 
-//    public void
+    public void addDifferentSubTypeToDifferentSubTypeList() {
+        List<? super A> listA = new ArrayList<>();
+        List<B> listB = new ArrayList<>();
+//        listA = listB;
+
+        listA.add(new A());
+        listA.add(new C());
+    }
 
 }
 
