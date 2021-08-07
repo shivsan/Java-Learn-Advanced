@@ -112,4 +112,39 @@ public class LatchingTest {
         thread3.join();
         assertEquals("FirstSecondThird", outContent.toString());
     }
+
+    @Test
+    public void testSemaphoreRunningInOrder() throws InterruptedException {
+        Semaphoring semaphoring = new Semaphoring();
+        Runnable firstJob = () -> System.out.print("First");
+
+        Runnable secondJob = () -> System.out.print("Second");
+
+        Runnable thirdJob = () -> System.out.print("Third");
+
+        Thread thread3 = new Thread(() -> {
+            try {
+                semaphoring.third(thirdJob);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        Thread thread1 = new Thread(() -> semaphoring.first(firstJob));
+        Thread thread2 = new Thread(() -> {
+            try {
+                semaphoring.second(secondJob);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        thread2.start();
+        thread3.start();
+        thread1.start();
+
+        thread1.join();
+        thread2.join();
+        thread3.join();
+        assertEquals("FirstSecondThird", outContent.toString());
+    }
 }
