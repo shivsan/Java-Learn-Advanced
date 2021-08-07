@@ -87,13 +87,25 @@ public class SemaphoringTest {
 
         Runnable thirdJob = () -> System.out.print("Third");
 
-        Thread thread3 = new Thread(() -> semaphoring.third(thirdJob));
+        Thread thread3 = new Thread(() -> {
+            try {
+                semaphoring.third(thirdJob);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
         Thread thread1 = new Thread(() -> semaphoring.first(firstJob));
-        Thread thread2 = new Thread(() -> semaphoring.second(secondJob));
+        Thread thread2 = new Thread(() -> {
+            try {
+                semaphoring.second(secondJob);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 
         thread2.start();
-        thread1.start();
         thread3.start();
+        thread1.start();
 
         thread1.join();
         thread2.join();
