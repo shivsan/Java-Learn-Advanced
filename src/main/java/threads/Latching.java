@@ -2,7 +2,7 @@ package threads;
 
 import java.util.concurrent.CountDownLatch;
 
-public class Semaphoring {
+public class Latching {
     CountDownLatch firstLatch = new CountDownLatch(1);
     CountDownLatch secondLatch = new CountDownLatch(1);
 

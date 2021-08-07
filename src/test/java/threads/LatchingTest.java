@@ -9,7 +9,7 @@ import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 
-public class SemaphoringTest {
+public class LatchingTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
@@ -80,7 +80,7 @@ public class SemaphoringTest {
 
     @Test
     public void testRunningInOrder() throws InterruptedException {
-        Semaphoring semaphoring = new Semaphoring();
+        Latching latching = new Latching();
         Runnable firstJob = () -> System.out.print("First");
 
         Runnable secondJob = () -> System.out.print("Second");
@@ -89,15 +89,15 @@ public class SemaphoringTest {
 
         Thread thread3 = new Thread(() -> {
             try {
-                semaphoring.third(thirdJob);
+                latching.third(thirdJob);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
-        Thread thread1 = new Thread(() -> semaphoring.first(firstJob));
+        Thread thread1 = new Thread(() -> latching.first(firstJob));
         Thread thread2 = new Thread(() -> {
             try {
-                semaphoring.second(secondJob);
+                latching.second(secondJob);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
